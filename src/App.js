@@ -1,25 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import ProfilePage from './pages/profile_page.tsx'  // ← .tsx 추가!
+import './index.css'
+
+const queryClient = new QueryClient()
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    // 1. React Query Provider (앱 전체 데이터 관리)
+    <QueryClientProvider client={queryClient}>
+      {/* 2. BrowserRouter (앱 전체 페이지 이동 관리) */}
+      <BrowserRouter>
+        <Routes>
+          <Route path="/profile" element={<ProfilePage />} />
+        </Routes>
+      </BrowserRouter>
+    </QueryClientProvider>
+  )
 }
 
 export default App;
