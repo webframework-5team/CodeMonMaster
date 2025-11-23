@@ -1,6 +1,7 @@
 {
   "name": "codemon_master",
   "version": "0.1.0",
+  "proxy": "http://52.78.157.84:8080",
   "private": true,
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.3",
