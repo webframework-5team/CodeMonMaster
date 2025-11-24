@@ -1,29 +1,37 @@
+
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';   // 방금 만든 로그인 페이지
 import SignupPage from './pages/SignupPage'; // 방금 만든 회원가입 페이지
 import HomePage from './pages/HomePage';
+import QuestionsPage from "./pages/Questions/QuestionsPage";
 
-// (참고) 나중에 홈 페이지나 다른 페이지도 여기에 추가하면 됩니다.
-// import HomePage from './pages/HomePage'; 
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* 주소창에 /login 이라고 치면 LoginPage.js를 보여줍니다. 
-        */}
-        <Route path="/login" element={<LoginPage />} />
+    <div className="min-h-screen w-full bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50">
+      <BrowserRouter>
+        <Routes>
+          {/* 기본 진입 시 로그인 페이지 */}
+          <Route path="/" element={<LoginPage />} />
 
-        {/* 주소창에 /signup 이라고 치면 SignupPage.js를 보여줍니다. 
-        */}
-        <Route path="/signup" element={<SignupPage />} />
+          {/* 로그인 */}
+          <Route path="/login" element={<LoginPage />} />
 
-        {/* 주소창에 / (기본 주소) 라고 치면 HomePage를보여줍니다.
-        */}
-        <Route path="/" element={<HomePage />} />
-      </Routes>
-    </BrowserRouter>
+
+          {/* 주소창에 / (기본 주소) 라고 치면 HomePage를보여줍니다.
+          */}
+          <Route path="/home" element={<HomePage />} />
+        
+          {/* 회원가입 */}
+          <Route path="/signup" element={<SignupPage />} />
+
+          {/* 문제 페이지 */}
+          <Route path="/questions" element={<QuestionsPage />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
+
   );
 }
 

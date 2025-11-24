@@ -1,7 +1,10 @@
 import React, { useState, useEffect, forwardRef, useImperativeHandle } from "react";
+import { Navigate } from "react-router-dom";
 
 const SkillCard = forwardRef(({ onOpenRecordModal, userId }, ref) => {
   const [skills, setSkills] = useState([]);
+
+  const [redirectInfo, setRedirectInfo] = useState(null);
 
   const fetchSkills = async () => {
     try {
@@ -23,18 +26,38 @@ const SkillCard = forwardRef(({ onOpenRecordModal, userId }, ref) => {
     refresh: fetchSkills
   }));
 
+  if (redirectInfo) {
+    return (
+      <Navigate
+        to="/questions"
+        state={{
+          userId: redirectInfo.userId,
+          skillId: redirectInfo.skillId,
+        }}
+        replace
+      />
+    );
+  }
+
   return (
     <div className="grid gap-6 justify-center" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))" }}>
       {skills.map(skill => {
         const expPercent = skill.exp ? Math.min((skill.exp / 100) * 100, 100) : 0;
+
         return (
           <div key={skill.userSkillId} className="flex flex-col items-center gap-4">
+            {/* 카드 영역 */}
             <div className="bg-white p-6 rounded-xl border-2 shadow hover:scale-105 transition cursor-pointer w-full">
               <div className="flex flex-col items-center gap-4">
-                <div className="w-24 h-24 rounded-full flex items-center justify-center relative" style={{ backgroundColor: "rgba(97,218,251,0.125)" }}>
-                  <img src={skill.characterImageUrl || "https://via.placeholder.com/96"} alt={skill.skillName} className="w-24 h-24 rounded-full object-cover" />
-                  <div className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full flex items-center justify-center text-lg shadow-lg" style={{ backgroundColor: "#61DAFB" }}>
-                    <img src={skill.skillImageUrl}></img>
+
+                <div className="w-24 h-24 rounded-full flex items-center justify-center relative"
+                  style={{ backgroundColor: "rgba(97,218,251,0.125)" }}>
+                  <img src={skill.characterImageUrl || "https://via.placeholder.com/96"}
+                       alt={skill.skillName}
+                       className="w-24 h-24 rounded-full object-cover" />
+                  <div className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full flex items-center justify-center text-lg shadow-lg"
+                       style={{ backgroundColor: "#61DAFB" }}>
+                    <img src={skill.skillImageUrl} alt="" />
                   </div>
                 </div>
 
@@ -67,14 +90,29 @@ const SkillCard = forwardRef(({ onOpenRecordModal, userId }, ref) => {
                     <div>{skill.straightDayCount}일</div>
                   </div>
                 </div>
+
               </div>
             </div>
 
+            
             <div className="flex gap-4 w-full">
-              <button onClick={onOpenRecordModal} className="flex-1 py-2 bg-white text-black font-semibold border border-gray-300 rounded-lg hover:bg-gray-100 transition">
+              <button
+                onClick={onOpenRecordModal}
+                className="flex-1 py-2 bg-white text-black font-semibold border border-gray-300 rounded-lg hover:bg-gray-100 transition"
+              >
                 학습기록
               </button>
-              <button className="flex-1 py-2 bg-white text-black font-semibold border border-gray-300 rounded-lg hover:bg-gray-100 transition">
+
+              
+              <button
+                onClick={() =>
+                  setRedirectInfo({
+                    userId: userId,
+                    skillId: skill.skillId
+                  })
+                }
+                className="flex-1 py-2 bg-white text-black font-semibold border border-gray-300 rounded-lg hover:bg-gray-100 transition"
+              >
                 문제풀기
               </button>
             </div>
