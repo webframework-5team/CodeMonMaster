@@ -7,7 +7,7 @@ import Stats from './Stats';
 import TechStackModal from './TechStackModal';
 import AnimalModal from './AnimalModal';
 import LearningRecordModal from './LearningRecordModal';
-import { saveUserSkill } from '../../api/skills';
+import { saveUserSkill } from "../../../api/skills";
 
 export default function LearningBuddies() {
   const [isTechModalOpen, setIsTechModalOpen] = useState(false);
@@ -39,9 +39,7 @@ export default function LearningBuddies() {
       <div className="container mx-auto px-4 py-8">
         <Header />
         <Stats />
-        <div onClick={() => setIsTechModalOpen(true)}>
-          <AddButton />
-        </div>
+        <AddButton onClick={() => setIsTechModalOpen(true)} />
         <div className="grid lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
           <div className="lg:col-span-2 space-y-8">
             <SkillCard ref={skillCardRef} onOpenRecordModal={() => setIsRecordModalOpen(true)} userId={userId} />
