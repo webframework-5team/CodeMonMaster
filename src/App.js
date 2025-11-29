@@ -5,6 +5,7 @@ import LoginPage from './pages/LoginPage';   // 방금 만든 로그인 페이�
 import SignupPage from './pages/SignupPage'; // 방금 만든 회원가입 페이지
 import HomePage from './pages/HomePage';
 import QuestionsPage from "./pages/Questions/QuestionsPage";
+import ProfilePage from "./pages/ProfilePage";   
 
 
 function App() {
@@ -28,6 +29,9 @@ function App() {
 
           {/* 문제 페이지 */}
           <Route path="/questions" element={<QuestionsPage />} />
+
+          {/* 마이 프로필 페이지*/}
+          <Route path="/profile" element={<ProfilePage />} />
         </Routes>
       </BrowserRouter>
     </div>
