@@ -20,17 +20,17 @@ import {
 export default function ProfilePage() {
   const navigate = useNavigate()
 
-  // ✅ localStorage에서 userId 읽어오기
+  // localStorage에서 userId 읽어오기
   const userId = localStorage.getItem("userId")
 
-  // ✅ 로그인 여부 체크
+  // 로그인 여부 
   useEffect(() => {
     if (!userId) {
       navigate("/login")
     }
   }, [userId, navigate])
 
-  // ✅ 서버에서 마이페이지 데이터 가져오기
+  // 서버에서 마이페이지 데이터 가져오기
   const { data, isLoading, error } = useQuery({
     queryKey: ["mypage", userId],
     enabled: Boolean(userId),
