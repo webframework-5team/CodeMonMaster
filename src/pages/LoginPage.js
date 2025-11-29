@@ -32,7 +32,8 @@ export default function LoginPage() {
       }
       
       alert(`로그인 성공! 메인으로 이동합니다.`);
-      navigate("/"); 
+      // home 페이지로 이동
+      navigate("/home"); 
 
     } catch (error) {
       console.error("로그인 에러:", error);
