@@ -39,20 +39,8 @@ function App() {
             {/* 문제 페이지 */}
             <Route path="/questions" element={<QuestionsPage />} />
 
-<<<<<<< HEAD
-          {/* 문제 페이지 */}
-          <Route path="/questions" element={<QuestionsPage />} />
-
-          {/* 마이 프로필 페이지*/}
-          <Route path="/profile" element={<ProfilePage />} />
-        </Routes>
-      </BrowserRouter>
-    </div>
-=======
             {/* 마이 프로필 페이지*/}
             <Route path="/profile" element={<ProfilePage />} />
->>>>>>> 1d45dd3 (feat : 프로필 페이지까지 연동 완료)
-
           </Routes>
         </BrowserRouter>
       </div>
