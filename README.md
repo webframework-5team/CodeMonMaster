@@ -1,70 +1,105 @@
-# Getting Started with Create React App
+<div align="center">
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<h1> CodeMon Master</h1>
+<h3>"기술 스택을 캐릭터로 키우며 함께 성장하세요!"</h3>
 
-## Available Scripts
+<p>
+개발 공부를 게임처럼 즐길 수 있는 게이미피케이션 학습 플랫폼,
 
-In the project directory, you can run:
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+<b>CodeMon Master</b>입니다.
+</p>
 
-### `npm test`
+</div>
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+📖 프로젝트 개요 (Project Info)
 
-### `npm run build`
+CodeMon Master는 사용자가 학습한 시간과 푼 문제 수에 따라 자신의 '코드몬' 캐릭터가 성장하는 웹 애플리케이션입니다.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+단순한 코딩 문제 풀이를 넘어, 성장(Growth), 수집(Collection), 경쟁(Ranking) 요소를 결합하여 지속적인 학습 동기를 부여합니다.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+팀명: 막내가좋아?
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+개발 기간:
 
-### `npm run eject`
+1차: 2025.09.15 - 10.10
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+2차: 2025.10.13 - 11.30
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+✨ 주요 기능 (Key Features)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+👾 게이미피케이션 성장 (Gamified Growth): 학습 데이터(풀이 수, 시간)를 기반으로 캐릭터가 실시간으로 진화합니다.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+🏆 경쟁 랭킹 시스템 (Competitive Ranking): 전체/분야별 랭킹 시스템을 통해 사용자 간 선의의 경쟁을 유도합니다.
 
-## Learn More
+📊 인사이트 대시보드 (Insight Dashboard): 마이페이지에서 학습 성향과 성취도를 시각화된 데이터로 제공합니다.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+📝 인터랙티브 퀴즈 (Interactive Quiz): 다양한 기술 스택의 문제를 풀고 즉각적인 피드백과 경험치(XP)를 획득합니다.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+📸 화면 미리보기 (Screen Preview)
 
-### Code Splitting
+1. 로그인 (Login)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+<img width="100%" src="https://github.com/user-attachments/assets/2d7e65ab-095b-44f3-9a5c-d131d69b9bc7" alt="로그인"/>
 
-### Analyzing the Bundle Size
+2. 회원가입 (Signup)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+<img width="100%" src="https://github.com/user-attachments/assets/89808219-857b-46af-b0e0-17617d34c8c1" alt="회원가입"/>
 
-### Making a Progressive Web App
+3. 메인 홈 (Dashboard)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+<img width="100%" src="https://github.com/user-attachments/assets/f7482bda-0aba-48f8-97e0-01d5000fc39c" alt="홈화면"/>
 
-### Advanced Configuration
+4. 마이 페이지 (My Page)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+<img width="100%" src="https://github.com/user-attachments/assets/74060d85-0c9b-4a12-a10e-da5949662416" alt="마이페이지"/>
 
-### Deployment
+5. 문제 풀이 (Quiz)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+<img width="100%" src="https://github.com/user-attachments/assets/3382b96a-2a7b-495d-91e8-df88107c517f" alt="문제풀이"/>
 
-### `npm run build` fails to minify
+6. 오답 노트 (Review)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+<img width="100%" src="https://github.com/user-attachments/assets/a536ee4e-8db6-434d-9657-b98dd78cf836" alt="오답노트"/>
+
+👨‍💻 팀원 및 역할 (Team & Responsibilities)
+
+<img width="1157" height="643" alt="image" src="https://github.com/user-attachments/assets/ddd9ed9e-15b4-411c-953b-f1fbae803842" />
+
+
+🛠 설치 및 실행 (Getting Started)
+
+1. 저장소 복제 (Clone)
+
+git clone [https://github.com/webframework-5team/CodeMonMaster.git](https://github.com/webframework-5team/CodeMonMaster.git)
+cd CodeMonMaster
+
+
+2. 패키지 설치 (Install)
+
+npm install
+
+
+3. 애플리케이션 실행 (Start)
+
+npm start
+
+
+실행 후 브라우저에서 http://localhost:3000으로 접속하여 확인하세요.
+
+📂 프로젝트 구조 (Structure)
+
+src/
+├── components/     # 재사용 가능한 UI 컴포넌트
+├── pages/          # 페이지 단위 컴포넌트 (Login, Home, Quiz 등)
+├── services/       # API 통신 로직 (Axios)
+├── hooks/          # 커스텀 훅 (React Query 등)
+├── store/          # 전역 상태 관리 (Zustand)
+└── assets/         # 이미지, 폰트 등 정적 파일
+
+
+<div align="center">
+<p>© 2025 WebFramework 5Team. All rights reserved.</p>
+</div>
