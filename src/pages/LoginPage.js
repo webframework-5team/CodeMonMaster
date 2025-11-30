@@ -14,25 +14,43 @@ export default function LoginPage() {
     e.preventDefault();
 
     try {
+      // 로그인 API 호출
       const response = await axios.post("/auth/login", {
         email: email,
         password: password
       });
 
+      console.log("로그인 응답:", response.data); 
       const result = response.data.result;
 
-      console.log("로그인 성공:", response.data);
+      // 유저 ID 추출 (서버 응답 키값 대응)
+      const userId = result?.userId || result?.id;
 
-      // userId 저장 (서버에서 아직 안 줄 경우 임시로 1 저장)
-      const userId = result?.userId || 1; 
+      // ID 누락 시 예외 처리
+      if (!userId) {
+        alert("로그인엔 성공했지만, 회원 번호(ID)를 찾을 수 없습니다.");
+        return;
+      }
+
+      // 로컬 스토리지에 유저 정보 저장
       localStorage.setItem("userId", userId);
       
       if (result?.token) {
         localStorage.setItem("token", result.token);
       }
+
+      // 사용자 이름 설정
+      // 서버에서 이름이 넘어오지 않을 경우 이메일 아이디로 대체
+      let userName = result.name || result.nickname;
       
-      alert(`로그인 성공! 메인으로 이동합니다.`);
-      // home 페이지로 이동
+      if (!userName) {
+        userName = email.split("@")[0]; 
+      }
+      
+      localStorage.setItem("name", userName);
+
+      // 메인 페이지로 이동
+      alert(`${userName}님 환영합니다!`);
       navigate("/home"); 
 
     } catch (error) {
