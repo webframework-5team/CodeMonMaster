@@ -5,7 +5,7 @@ export default function Stats({ userId }) {
   const { stats } = useUserStats(userId);
 
   const statsData = [
-    { label: "학습 횟수", value: stats.learningCount, icon: "📚" },
+    { label: "스택 수", value: stats.learningCount, icon: "⚒️" },
     { label: "레벨", value: stats.level, icon: "🏆" },
     { label: "학습 시간", value: stats.learningMinutes + "분", icon: "⏱️" },
     { label: "풀이한 문제", value: stats.solvedQuestionCount, icon: "📝" },

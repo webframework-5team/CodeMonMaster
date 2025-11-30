@@ -18,6 +18,8 @@ export default function LearningBuddies() {
   const [isRecordModalOpen, setIsRecordModalOpen] = useState(false);
   const [selectedTech, setSelectedTech] = useState(null);
 
+  const [selectedUserSkill, setSelectedUserSkill] = useState(null);
+
   const skillCardRef = useRef();
 
   // localStorage에서 userId 가져오기
@@ -63,7 +65,14 @@ export default function LearningBuddies() {
         <AddButton onClick={() => setIsTechModalOpen(true)} />
         <div className="grid lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
           <div className="lg:col-span-2 space-y-8">
-            <SkillCard ref={skillCardRef} onOpenRecordModal={() => setIsRecordModalOpen(true)} userId={userId} />
+            <SkillCard
+              ref={skillCardRef}
+              onOpenRecordModal={(skill) => {
+                setSelectedUserSkill(skill);
+                setIsRecordModalOpen(true);
+              }}
+              userId={userId}
+            />
           </div>
           <Ranking myName={userName} />
         </div>
@@ -92,7 +101,12 @@ export default function LearningBuddies() {
         />
       )}
 
-      {isRecordModalOpen && <LearningRecordModal onClose={() => setIsRecordModalOpen(false)} selectedTech={selectedTech} />}
+      {isRecordModalOpen && (
+        <LearningRecordModal
+          onClose={() => setIsRecordModalOpen(false)}
+          selectedTech={selectedUserSkill}
+        />
+      )}
     </div>
   );
 }

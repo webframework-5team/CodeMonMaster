@@ -103,7 +103,7 @@ const SkillCard = forwardRef(({ onOpenRecordModal, userId }, ref) => {
 
             <div className="flex gap-4 w-full">
               <button
-                onClick={onOpenRecordModal}
+                onClick={() => onOpenRecordModal(skill)}
                 className="flex-1 py-2 bg-white text-black font-semibold border border-gray-300 rounded-lg hover:bg-gray-100 transition"
               >
                 학습기록
