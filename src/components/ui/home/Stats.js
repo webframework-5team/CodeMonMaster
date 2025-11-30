@@ -1,8 +1,8 @@
 import React from "react";
 import useUserStats from "../../../hooks/useUserStats";
 
-export default function Stats() {
-  const { stats } = useUserStats();
+export default function Stats({ userId }) {
+  const { stats } = useUserStats(userId);
 
   const statsData = [
     { label: "학습 횟수", value: stats.learningCount, icon: "📚" },

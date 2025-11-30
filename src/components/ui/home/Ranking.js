@@ -2,8 +2,8 @@ import React from "react";
 import { GiCrown } from "react-icons/gi";
 import useRanking from "../../../hooks/useRanking";
 
-export default function Ranking() {
-  const { rankingData, myRank, loading } = useRanking();
+export default function Ranking({ myName }) {
+  const { rankingData, myRank, loading } = useRanking(myName);
 
   const getRankIcon = (idx) => {
     if (idx === 0) return <GiCrown size={24} color="#FFD700" />; // 금
@@ -38,8 +38,8 @@ export default function Ranking() {
             <div
               key={idx}
               className={`flex items-center gap-3 p-3 rounded-lg transition-colors ${isMe
-                  ? "bg-blue-100 border-2 border-blue-500"
-                  : "hover:bg-gray-100"
+                ? "bg-blue-100 border-2 border-blue-500"
+                : "hover:bg-gray-100"
                 }`}
             >
               <div className="flex-shrink-0">{getRankIcon(idx)}</div>

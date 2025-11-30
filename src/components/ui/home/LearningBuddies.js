@@ -1,4 +1,6 @@
 import React, { useState, useRef } from "react";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import Ranking from './Ranking';
 import AddButton from './AddSkillButton';
 import Header from './Header';
@@ -8,6 +10,7 @@ import TechStackModal from './TechStackModal';
 import AnimalModal from './AnimalModal';
 import LearningRecordModal from './LearningRecordModal';
 import { saveUserSkill } from "../../../api/skills";
+import { getCurrentUser } from "../../../utils/storage";
 
 export default function LearningBuddies() {
   const [isTechModalOpen, setIsTechModalOpen] = useState(false);
@@ -17,9 +20,27 @@ export default function LearningBuddies() {
 
   const skillCardRef = useRef();
 
-  const userId = 1;
+  // localStorage에서 userId 가져오기
+  const currentUser = getCurrentUser();
+  const userId = currentUser ? currentUser.userId : null;
+
+  // 유저 정보 가져오기 (이름 등)
+  const { data: userData } = useQuery({
+    queryKey: ["userProfile", userId],
+    enabled: !!userId,
+    queryFn: async () => {
+      const res = await axios.get(`/user/${userId}`);
+      return res.data.result;
+    },
+  });
+
+  const userName = userData ? userData.name : "게스트";
 
   const handleCharacterSelect = async (character) => {
+    if (!userId) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
     try {
       const res = await saveUserSkill({
         userId,
@@ -38,13 +59,13 @@ export default function LearningBuddies() {
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
         <Header />
-        <Stats />
+        <Stats userId={userId} />
         <AddButton onClick={() => setIsTechModalOpen(true)} />
         <div className="grid lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
           <div className="lg:col-span-2 space-y-8">
             <SkillCard ref={skillCardRef} onOpenRecordModal={() => setIsRecordModalOpen(true)} userId={userId} />
           </div>
-          <Ranking />
+          <Ranking myName={userName} />
         </div>
       </div>
 
