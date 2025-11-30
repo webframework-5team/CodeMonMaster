@@ -12,10 +12,13 @@ import LearningRecordModal from './LearningRecordModal';
 import { saveUserSkill } from "../../../api/skills";
 import { getCurrentUser } from "../../../utils/storage";
 
+import DuplicateSkillModal from './DuplicateSkillModal';
+
 export default function LearningBuddies() {
   const [isTechModalOpen, setIsTechModalOpen] = useState(false);
   const [isAnimalModalOpen, setIsAnimalModalOpen] = useState(false);
   const [isRecordModalOpen, setIsRecordModalOpen] = useState(false);
+  const [isDuplicateModalOpen, setIsDuplicateModalOpen] = useState(false);
   const [selectedTech, setSelectedTech] = useState(null);
 
   const [selectedUserSkill, setSelectedUserSkill] = useState(null);
@@ -54,6 +57,10 @@ export default function LearningBuddies() {
       skillCardRef.current?.refresh();
     } catch (err) {
       console.error("저장 실패:", err);
+      if (err.response && err.response.data && err.response.data.code === "SKILL4001") {
+        setIsDuplicateModalOpen(true);
+        setIsAnimalModalOpen(false); // 동물 선택 모달 닫기
+      }
     }
   };
 
@@ -105,6 +112,12 @@ export default function LearningBuddies() {
         <LearningRecordModal
           onClose={() => setIsRecordModalOpen(false)}
           selectedTech={selectedUserSkill}
+        />
+      )}
+
+      {isDuplicateModalOpen && (
+        <DuplicateSkillModal
+          onClose={() => setIsDuplicateModalOpen(false)}
         />
       )}
     </div>
