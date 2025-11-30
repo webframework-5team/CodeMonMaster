@@ -1,6 +1,7 @@
 <div align="center">
 
-<h1> CodeMon Master</h1>
+<h1> <img width="48" height="48" alt="image" src="https://github.com/user-attachments/assets/5cded36b-7f96-42e4-b887-2f1c40d064c3" />
+CodeMon Master</h1>
 <h3>"기술 스택을 캐릭터로 키우며 함께 성장하세요!"</h3>
 
 <p>
