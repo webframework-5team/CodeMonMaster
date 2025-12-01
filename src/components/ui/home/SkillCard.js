@@ -1,27 +1,24 @@
-import React, { useState, forwardRef, useImperativeHandle } from "react";
-import { Navigate } from "react-router-dom";
+import React, { forwardRef, useImperativeHandle } from "react";
+import { useNavigate } from "react-router-dom";
 import useUserSkills from "../../../hooks/useUserSkills";
 
 const SkillCard = forwardRef(({ onOpenRecordModal, userId }, ref) => {
   const { skills, refreshSkills } = useUserSkills(userId);
-  const [redirectInfo, setRedirectInfo] = useState(null);
+  const navigate = useNavigate();
 
   useImperativeHandle(ref, () => ({
     refresh: refreshSkills,
   }));
 
-  if (redirectInfo) {
-    return (
-      <Navigate
-        to="/questions"
-        state={{
-          userId: redirectInfo.userId,
-          skillId: redirectInfo.skillId,
-        }}
-        replace
-      />
-    );
-  }
+  const handleQuestionClick = (skillId) => {
+    console.log("문제풀기 클릭:", { userId, skillId });
+    navigate('/questions', {
+      state: {
+        userId: userId,
+        skillId: skillId,
+      }
+    });
+  };
 
   return (
     <div
@@ -110,12 +107,7 @@ const SkillCard = forwardRef(({ onOpenRecordModal, userId }, ref) => {
               </button>
 
               <button
-                onClick={() =>
-                  setRedirectInfo({
-                    userId: userId,
-                    skillId: skill.skillId,
-                  })
-                }
+                onClick={() => handleQuestionClick(skill.skillId)}
                 className="flex-1 py-2 bg-white text-black font-semibold border border-gray-300 rounded-lg hover:bg-gray-100 transition"
               >
                 문제풀기

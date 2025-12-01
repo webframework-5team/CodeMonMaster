@@ -1,5 +1,5 @@
 // src/components/questions/QuestionList.jsx
-import React from "react";
+import React, { useState } from "react";
 
 function QuestionList({
   questions,
@@ -9,6 +9,8 @@ function QuestionList({
   setSolved,
   onSelect,
   selectedId,
+  wrongAnswers,
+  onShowWrongAnswers,
 }) {
   return (
     <div className="w-full h-full flex flex-col gap-4 bg-white/80 backdrop-blur rounded-2xl p-4 shadow-lg">
@@ -18,7 +20,6 @@ function QuestionList({
         value={difficulty}
         onChange={(e) => setDifficulty(e.target.value)}
       >
-        <option value="ALL">모든 난이도</option>
         <option value="EASY">쉬움</option>
         <option value="MEDIUM">보통</option>
         <option value="HARD">어려움</option>
@@ -35,12 +36,18 @@ function QuestionList({
         <option value="SOLVED">해결됨</option>
       </select>
 
-      {/* (나중에) 오답노트 버튼 자리 */}
+      {/* 오답노트 버튼 */}
       <button
         type="button"
-        className="w-full mt-1 py-2.5 rounded-xl bg-gray-900 text-white text-sm font-semibold hover:bg-gray-800 transition"
+        onClick={onShowWrongAnswers}
+        className="w-full mt-1 py-2.5 rounded-xl bg-red-600 text-white text-sm font-semibold hover:bg-red-700 transition relative"
       >
         오답노트 보기
+        {wrongAnswers && wrongAnswers.length > 0 && (
+          <span className="absolute -top-1 -right-1 bg-yellow-400 text-gray-900 text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+            {wrongAnswers.length}
+          </span>
+        )}
       </button>
 
       {/* 문제 목록 */}
