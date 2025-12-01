@@ -155,6 +155,8 @@ export default function ProfilePage() {
           <Card>
             <CardContent className="pt-6 text-center">
               <Brain className="w-8 h-8 mx-auto mb-2 text-purple-500" />
+
+              {/* ✅ stats.solvedQuestionCount 사용 (홈 화면과 동일) */}
               <div className="text-2xl font-bold">{stats.solvedQuestionCount}</div>
               <div className="text-sm">해결한 문제</div>
             </CardContent>
