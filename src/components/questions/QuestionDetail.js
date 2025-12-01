@@ -1,21 +1,23 @@
-// src/components/questions/QuestionDetail.jsx
+// src/components/questions/QuestionDetail.js
 import React, { useEffect, useState } from "react";
 import { fetchQuestionDetail, submitQuestion } from "../../services/questions";
 
-function QuestionDetail({ questionId, userId, onAddToWrongAnswers, onCorrectAnswer }) {
+function QuestionDetail({ questionId, userId, onAddToWrongAnswers, onCorrectAnswer, isQuestionSolved }) {
   const [question, setQuestion] = useState(null);
   const [options, setOptions] = useState([]);
   const [selected, setSelected] = useState(null);
   const [result, setResult] = useState(null); // true / false / null
   const [submitting, setSubmitting] = useState(false);
+  const [alreadySolved, setAlreadySolved] = useState(false); // 이미 푼 문제인지 여부
 
   // 선택된 문제가 바뀔 때마다 상세 조회
   useEffect(() => {
-    if (!questionId) {
+    if (!questionId || !userId) {
       setQuestion(null);
       setOptions([]);
       setSelected(null);
       setResult(null);
+      setAlreadySolved(false);
       return;
     }
 
@@ -35,20 +37,27 @@ function QuestionDetail({ questionId, userId, onAddToWrongAnswers, onCorrectAnsw
         setSelected(null);
         setResult(null);
         
+        // ✅ localStorage에서 solved 상태 확인
+        const solved = isQuestionSolved(questionId);
+        setAlreadySolved(solved);
+        
         console.log("문제 로드:", {
           questionId: data.questionId,
           title: data.title,
-          difficulty: data.difficulty
+          difficulty: data.difficulty,
+          solved: solved,
+          alreadySolved: solved
         });
       } catch (err) {
         console.error("문제 상세 조회 실패:", err);
         setQuestion(null);
         setOptions([]);
+        setAlreadySolved(false);
       }
     }
 
     loadDetail();
-  }, [questionId]);
+  }, [questionId, userId, isQuestionSolved]);
 
   // 정답 제출
   const handleSubmit = async () => {
@@ -61,7 +70,8 @@ function QuestionDetail({ questionId, userId, onAddToWrongAnswers, onCorrectAnsw
       questionId,
       userId,
       selected: selected,
-      answerToSend: answerToSend
+      answerToSend: answerToSend,
+      alreadySolved: alreadySolved
     });
 
     try {
@@ -73,12 +83,21 @@ function QuestionDetail({ questionId, userId, onAddToWrongAnswers, onCorrectAnsw
       console.log(correct ? "정답!" : "오답!");
 
       if (correct) {
-        // 정답인 경우 - 부모 컴포넌트에 알림
+        // 정답인 경우
+        if (alreadySolved) {
+          // 이미 푼 문제인 경우
+          console.log("⚠️ 이미 푼 문제입니다. (재풀이)");
+        } else {
+          // 처음 푼 문제인 경우
+          console.log("✅ 처음 푼 문제입니다. localStorage에 저장합니다.");
+        }
+        
+        // 부모 컴포넌트에 알림 (questionId 전달)
         if (onCorrectAnswer) {
-          onCorrectAnswer();
+          onCorrectAnswer(questionId);
         }
       } else {
-        // 오답인 경우 - 오답노트에 추가 (정답은 서버에서 받아야 함)
+        // 오답인 경우 - 오답노트에 추가
         if (onAddToWrongAnswers) {
           const wrongAnswerData = {
             questionId: question.questionId,
@@ -144,14 +163,25 @@ function QuestionDetail({ questionId, userId, onAddToWrongAnswers, onCorrectAnsw
           <h2 className="text-2xl font-bold text-gray-900 flex-1">
             {question.title}
           </h2>
-          <span
-            className={`text-xs px-3 py-1 rounded-full font-semibold ${difficultyBadgeClass}`}
-          >
-            {question.difficulty}
-          </span>
+          <div className="flex items-center gap-2">
+            {alreadySolved && (
+              <span className="text-xs px-3 py-1 rounded-full font-semibold bg-green-100 text-green-700">
+                ✓ 해결 완료
+              </span>
+            )}
+            <span
+              className={`text-xs px-3 py-1 rounded-full font-semibold ${difficultyBadgeClass}`}
+            >
+              {question.difficulty}
+            </span>
+          </div>
         </div>
         <p className="text-sm text-gray-600 mb-2">{question.content}</p>
-        <div className="text-xs text-gray-500">보상: +{question.rewardExp} XP</div>
+        <div className="text-xs text-gray-500">
+          {alreadySolved 
+            ? "⚠️ 이미 해결한 문제입니다 (재풀이 가능하지만 경험치는 한 번만 지급됩니다)" 
+            : `보상: +${question.rewardExp} XP`}
+        </div>
       </div>
 
       {/* 선택지 */}
@@ -212,7 +242,9 @@ function QuestionDetail({ questionId, userId, onAddToWrongAnswers, onCorrectAnsw
           }`}
         >
           {result
-            ? `정답입니다! +${question.rewardExp} XP 획득`
+            ? alreadySolved
+              ? "정답입니다! ✓ (이미 해결한 문제라 경험치는 추가 지급되지 않을 수 있습니다)"
+              : `정답입니다! +${question.rewardExp} XP 획득 🎉`
             : "틀렸습니다. 다시 도전해보세요!"}
         </div>
       )}

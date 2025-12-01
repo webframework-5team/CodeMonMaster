@@ -1,4 +1,4 @@
-// src/pages/Questions/QuestionsPage.jsx
+// src/pages/Questions/QuestionsPage.js
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
@@ -32,6 +32,21 @@ function QuestionsPage() {
   console.log("🎯 QuestionsPage 렌더링!");
   console.log("받아온 userId:", userId);
   console.log("받아온 skillId:", skillId);
+
+  // ✅ localStorage에서 해결한 문제 확인 함수
+  const isQuestionSolved = useCallback((questionId) => {
+    if (!userId) return false;
+    const key = `solved_${userId}_${questionId}`;
+    return localStorage.getItem(key) === 'true';
+  }, [userId]);
+
+  // ✅ 문제 해결 상태를 localStorage에 저장
+  const markQuestionAsSolved = useCallback((questionId) => {
+    if (!userId) return;
+    const key = `solved_${userId}_${questionId}`;
+    localStorage.setItem(key, 'true');
+    console.log(`✅ 문제 ${questionId} 해결 상태 저장`);
+  }, [userId]);
   
   // 디버깅: 페이지가 제대로 마운트되었는지 확인
   useEffect(() => {
@@ -89,15 +104,22 @@ function QuestionsPage() {
         console.log(`📡 문제 목록 조회: skillId=${skillId}, userId=${userId}, difficulty=${difficulty}, solved=${solved}`);
         const res = await fetchQuestionsBySkill(skillId, userId, difficulty, solved);
         const data = res.data?.result?.questions || [];
-        setQuestions(data);
-        console.log(`✅ 문제 목록 조회 성공 (${data.length}개):`, data);
+        
+        // ✅ 각 문제에 solved 상태 추가
+        const questionsWithSolved = data.map(q => ({
+          ...q,
+          solved: isQuestionSolved(q.questionId)
+        }));
+        
+        setQuestions(questionsWithSolved);
+        console.log(`✅ 문제 목록 조회 성공 (${questionsWithSolved.length}개):`, questionsWithSolved);
       } catch (err) {
         console.error("❌ 문제 목록 조회 실패:", err);
         setQuestions([]);
       }
     }
     loadQuestions();
-  }, [difficulty, solved, userId, skillId]);
+  }, [difficulty, solved, userId, skillId, isQuestionSolved]);
 
   // 헤더 카운트 로딩 함수 - 선택한 난이도에 맞춰 조회
   const loadHeaderCounts = useCallback(async () => {
@@ -109,16 +131,15 @@ function QuestionsPage() {
       const totalData = totalRes.data?.result?.questions || [];
       setTotalCount(totalData.length);
 
-      // ✅ 선택한 난이도의 해결한 문제 수 조회
-      const solvedRes = await fetchQuestionsBySkill(skillId, userId, difficulty, "SOLVED");
-      const solvedData = solvedRes.data?.result?.questions || [];
-      setSolvedCount(solvedData.length);
+      // ✅ localStorage 기반으로 해결한 문제 수 계산
+      const solvedQuestions = totalData.filter(q => isQuestionSolved(q.questionId));
+      setSolvedCount(solvedQuestions.length);
       
-      console.log(`📊 카운트 (${difficulty}): 해결=${solvedData.length} / 전체=${totalData.length}`);
+      console.log(`📊 카운트 (${difficulty}): 해결=${solvedQuestions.length} / 전체=${totalData.length}`);
     } catch (err) {
       console.error("❌ 헤더 카운트 조회 실패:", err);
     }
-  }, [userId, skillId, difficulty]);
+  }, [userId, skillId, difficulty, isQuestionSolved]);
 
   // 초기 헤더 카운트 로딩 & 난이도 변경 시 재조회
   useEffect(() => {
@@ -133,16 +154,26 @@ function QuestionsPage() {
       console.log(`🔄 문제 목록 갱신: difficulty=${difficulty}, solved=${solved}`);
       const res = await fetchQuestionsBySkill(skillId, userId, difficulty, solved);
       const data = res.data?.result?.questions || [];
-      setQuestions(data);
-      console.log(`✅ 문제 목록 갱신 완료 (${data.length}개)`);
+      
+      // ✅ 각 문제에 solved 상태 추가
+      const questionsWithSolved = data.map(q => ({
+        ...q,
+        solved: isQuestionSolved(q.questionId)
+      }));
+      
+      setQuestions(questionsWithSolved);
+      console.log(`✅ 문제 목록 갱신 완료 (${questionsWithSolved.length}개)`);
     } catch (err) {
       console.error("❌ 문제 목록 갱신 실패:", err);
     }
-  }, [userId, skillId, difficulty, solved]);
+  }, [userId, skillId, difficulty, solved, isQuestionSolved]);
 
   // 정답 처리 시 호출되는 콜백
-  const handleCorrectAnswer = useCallback(() => {
+  const handleCorrectAnswer = useCallback((questionId) => {
     console.log("✅ 정답 처리 - 카운트 및 목록 업데이트 시작");
+    
+    // ✅ localStorage에 해결 상태 저장
+    markQuestionAsSolved(questionId);
     
     // 1. 즉시 UI 업데이트 (낙관적 업데이트)
     setSolvedCount(prev => prev + 1);
@@ -162,7 +193,7 @@ function QuestionsPage() {
     setTimeout(() => {
       setSelectedId(null);
     }, 500); // 약간의 딜레이 후 초기화 (사용자가 정답 메시지를 볼 수 있도록)
-  }, [loadHeaderCounts, refreshQuestionList, queryClient]);
+  }, [loadHeaderCounts, refreshQuestionList, queryClient, markQuestionAsSolved]);
 
   // 오답노트에 추가
   const handleAddToWrongAnswers = (wrongAnswer) => {
@@ -257,6 +288,7 @@ function QuestionsPage() {
               userId={userId}
               onAddToWrongAnswers={handleAddToWrongAnswers}
               onCorrectAnswer={handleCorrectAnswer}
+              isQuestionSolved={isQuestionSolved}
             />
           </div>
         </div>

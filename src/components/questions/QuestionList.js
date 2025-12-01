@@ -1,4 +1,4 @@
-// src/components/questions/QuestionList.jsx
+// src/components/questions/QuestionList.js
 import React, { useState } from "react";
 
 function QuestionList({
@@ -58,19 +58,29 @@ function QuestionList({
 
         {questions.map((q) => {
           const isSelected = selectedId === q.questionId;
+          const isSolved = q.solved === true;
 
           return (
             <div
               key={q.questionId}
-              className={`p-4 rounded-2xl border text-sm cursor-pointer transition-all shadow-sm ${
+              className={`p-4 rounded-2xl border text-sm cursor-pointer transition-all shadow-sm relative ${
                 isSelected
                   ? "bg-indigo-50 border-indigo-400"
+                  : isSolved
+                  ? "bg-green-50 border-green-300 hover:bg-green-100"
                   : "bg-white border-gray-200 hover:bg-gray-50 hover:border-indigo-200"
               }`}
               onClick={() => onSelect(q.questionId)}
             >
-              <div className="flex justify-between items-center mb-1">
-                <p className="font-semibold text-gray-800 truncate">
+              {/* 해결 완료 체크 마크 */}
+              {isSolved && (
+                <div className="absolute top-2 right-2 bg-green-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
+                  ✓
+                </div>
+              )}
+              
+              <div className="flex justify-between items-center mb-1 pr-6">
+                <p className={`font-semibold truncate ${isSolved ? "text-green-800" : "text-gray-800"}`}>
                   {q.title}
                 </p>
                 <span
@@ -86,7 +96,9 @@ function QuestionList({
                 </span>
               </div>
 
-              <p className="text-[11px] text-gray-500 mt-1">+{q.exp} XP</p>
+              <p className="text-[11px] text-gray-500 mt-1">
+                {isSolved ? "✓ 해결 완료" : `+${q.exp} XP`}
+              </p>
             </div>
           );
         })}
