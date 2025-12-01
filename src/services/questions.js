@@ -1,24 +1,25 @@
-import axios from "axios";
-
-const API = "http://52.78.201.73:8080";
+import api from "./api";
 
 // 1) 스킬 기반 문제 리스트 조회
-export function fetchQuestionsBySkill(skillId, userId, difficulty, solved) {
-  return axios.get(`${API}/questions/skill/${skillId}`, {
+export const fetchQuestionsBySkill = (skillId, userId, difficulty, solved) => {
+  return api.get(`/questions/skill/${skillId}`, {
     params: {
       userId: userId,
-      difficulty: difficulty || "EASY", // NONE → "" 처리했기 때문에 기본 EASY 안전 처리
-      solved: solved,
+      difficulty: difficulty, // EASY, MEDIUM, HARD
+      solved: solved, // SOLVED, UNSOLVED, NONE
     },
   });
-}
+};
 
 // 2) 문제 상세 조회
-export function fetchQuestionDetail(questionId) {
-  return axios.get(`${API}/questions/${questionId}`);
-}
+export const fetchQuestionDetail = (questionId) => {
+  return api.get(`/questions/${questionId}`);
+};
 
 // 3) 문제 제출 (정답)
-export function submitQuestion(questionId, body) {
-  return axios.post(`${API}/questions/${questionId}`, body);
-}
+export const submitQuestion = (questionId, userId, answer) => {
+  return api.post(`/questions/${questionId}`, {
+    userId: userId,
+    answer: answer,
+  });
+};

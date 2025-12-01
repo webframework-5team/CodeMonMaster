@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { fetchQuestionDetail, submitQuestion } from "../../services/questions";
 
-function QuestionDetail({ questionId, userId }) {
+function QuestionDetail({ questionId, userId, onAddToWrongAnswers, onCorrectAnswer }) {
   const [question, setQuestion] = useState(null);
   const [options, setOptions] = useState([]);
   const [selected, setSelected] = useState(null);
@@ -34,6 +34,12 @@ function QuestionDetail({ questionId, userId }) {
         ]);
         setSelected(null);
         setResult(null);
+        
+        console.log("문제 로드:", {
+          questionId: data.questionId,
+          title: data.title,
+          difficulty: data.difficulty
+        });
       } catch (err) {
         console.error("문제 상세 조회 실패:", err);
         setQuestion(null);
@@ -48,17 +54,60 @@ function QuestionDetail({ questionId, userId }) {
   const handleSubmit = async () => {
     if (selected === null || !question) return;
 
+    // 인덱스 변환: UI(0,1,2,3) → API(1,2,3,4)
+    const answerToSend = selected + 1;
+
+    console.log("정답 제출:", {
+      questionId,
+      userId,
+      selected: selected,
+      answerToSend: answerToSend
+    });
+
     try {
       setSubmitting(true);
-      const res = await submitQuestion(questionId, userId, selected);
+      const res = await submitQuestion(questionId, userId, answerToSend);
       const correct = res.data?.result?.isCorrect;
       setResult(correct);
+
+      console.log(correct ? "정답!" : "오답!");
+
+      if (correct) {
+        // 정답인 경우 - 부모 컴포넌트에 알림
+        if (onCorrectAnswer) {
+          onCorrectAnswer();
+        }
+      } else {
+        // 오답인 경우 - 오답노트에 추가 (정답은 서버에서 받아야 함)
+        if (onAddToWrongAnswers) {
+          const wrongAnswerData = {
+            questionId: question.questionId,
+            title: question.title,
+            content: question.content,
+            difficulty: question.difficulty,
+            options: options,
+            myAnswer: selected,
+            correctAnswer: null, // 서버에서 정답 정보를 제공하지 않는 경우
+            rewardExp: question.rewardExp,
+          };
+          
+          console.log("오답노트에 추가:", wrongAnswerData);
+          onAddToWrongAnswers(wrongAnswerData);
+        }
+      }
     } catch (err) {
       console.error("정답 제출 실패:", err);
+      console.error("에러 상세:", err.response?.data);
       setResult(false);
     } finally {
       setSubmitting(false);
     }
+  };
+
+  // 다시 도전하기
+  const handleRetry = () => {
+    setSelected(null);
+    setResult(null);
   };
 
   // 선택된 문제가 없을 때
@@ -81,9 +130,9 @@ function QuestionDetail({ questionId, userId }) {
   }
 
   const difficultyBadgeClass =
-    question.difficulty === "EASY"
+    question.difficulty === "EASY" || question.difficulty === "easy"
       ? "bg-green-100 text-green-700"
-      : question.difficulty === "MEDIUM"
+      : question.difficulty === "MEDIUM" || question.difficulty === "medium"
       ? "bg-yellow-100 text-yellow-700"
       : "bg-red-100 text-red-700";
 
@@ -113,15 +162,20 @@ function QuestionDetail({ questionId, userId }) {
             "w-full p-3 text-left border rounded-xl text-sm transition cursor-pointer ";
 
           if (result === null) {
+            // 제출 전: 선택 여부만 표시
             optionClass += isSelected
               ? "border-indigo-500 bg-indigo-50"
               : "border-gray-200 bg-gray-50 hover:bg-gray-100";
-          } else {
-            // 정답/오답 표시
-            const isCorrectIdx = idx === question.answer; // 백엔드 정답 인덱스(0~3)라고 가정
-            if (isCorrectIdx) {
+          } else if (result === true) {
+            // 정답인 경우
+            if (isSelected) {
               optionClass += "border-green-500 bg-green-50";
-            } else if (isSelected && !isCorrectIdx) {
+            } else {
+              optionClass += "border-gray-200 bg-gray-50";
+            }
+          } else {
+            // 오답인 경우 - 내가 선택한 답만 표시
+            if (isSelected) {
               optionClass += "border-red-500 bg-red-50";
             } else {
               optionClass += "border-gray-200 bg-gray-50";
@@ -134,8 +188,17 @@ function QuestionDetail({ questionId, userId }) {
               type="button"
               className={optionClass}
               onClick={() => result === null && setSelected(idx)}
+              disabled={result === true}
             >
-              {opt}
+              <div className="flex items-center justify-between">
+                <span>{opt}</span>
+                {result === true && isSelected && (
+                  <span className="text-xs text-green-700 font-semibold">✓ 정답</span>
+                )}
+                {result === false && isSelected && (
+                  <span className="text-xs text-red-600 font-semibold">✗ 오답</span>
+                )}
+              </div>
             </button>
           );
         })}
@@ -144,7 +207,7 @@ function QuestionDetail({ questionId, userId }) {
       {/* 결과 메시지 */}
       {result !== null && (
         <div
-          className={`mt-2 w-full rounded-xl p-3 text-sm font-semibold flex items-center justify-center ${
+          className={`w-full rounded-xl p-3 text-sm font-semibold flex items-center justify-center ${
             result ? "bg-green-50 text-green-700" : "bg-red-50 text-red-600"
           }`}
         >
@@ -154,15 +217,33 @@ function QuestionDetail({ questionId, userId }) {
         </div>
       )}
 
-      {/* 제출 버튼 */}
-      <button
-        type="button"
-        disabled={selected === null || submitting}
-        onClick={handleSubmit}
-        className="mt-auto w-full py-3 rounded-xl bg-gray-900 text-white text-sm font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed hover:bg-gray-800 transition"
-      >
-        {submitting ? "제출 중..." : "제출하기"}
-      </button>
+      {/* 제출/다시도전 버튼 */}
+      {result === null || result === false ? (
+        <button
+          type="button"
+          disabled={selected === null || submitting}
+          onClick={result === null ? handleSubmit : handleRetry}
+          className={`mt-auto w-full py-3 rounded-xl text-white text-sm font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed transition ${
+            result === false
+              ? "bg-indigo-600 hover:bg-indigo-700"
+              : "bg-gray-900 hover:bg-gray-800"
+          }`}
+        >
+          {submitting
+            ? "처리 중..."
+            : result === false
+            ? "다시 도전하기"
+            : "제출하기"}
+        </button>
+      ) : (
+        <button
+          type="button"
+          disabled
+          className="mt-auto w-full py-3 rounded-xl bg-gray-400 text-white text-sm font-semibold cursor-not-allowed"
+        >
+          제출 완료
+        </button>
+      )}
     </div>
   );
 }
