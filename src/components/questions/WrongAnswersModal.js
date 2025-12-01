@@ -1,4 +1,4 @@
-// src/components/questions/WrongAnswersModal.jsx
+// src/components/questions/WrongAnswersModal.js
 import React from "react";
 
 function WrongAnswersModal({ wrongAnswers, onClose, onClear }) {
