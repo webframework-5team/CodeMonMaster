@@ -63,6 +63,14 @@ export default function ProfilePage() {
 
   const result = data
   
+  // ==========================================
+  // ★ [수정 1] 총 경험치 계산 로직 추가
+  // ==========================================
+  // ※ 팀원과 합의한 레벨업 기준이 10점이라면 10으로, 100점이면 100으로 설정하세요.
+  const levelUpExp = 100; 
+  const totalCalculatedExp = ((result.level - 1) * levelUpExp) + result.exp;
+  // ==========================================
+
   // 레벨 기반 뱃지 계산 (서버 값 무시)
   const badgeCount = calculateBadgeCount(result.level)
   const badgeInfo = getBadgeInfo(result.level)
@@ -139,8 +147,13 @@ export default function ProfilePage() {
           <Card>
             <CardContent className="pt-6 text-center">
               <TrendingUp className="w-8 h-8 mx-auto mb-2 text-green-500" />
-              <div className="text-2xl font-bold">{result.exp}</div>
+              
+              {/* ========================================== */}
+              {/* ★ [수정 2] result.exp 대신 계산된 값 사용 */}
+              {/* ========================================== */}
+              <div className="text-2xl font-bold">{totalCalculatedExp} EXP</div>
               <div className="text-sm">총 경험치</div>
+              
             </CardContent>
           </Card>
 
