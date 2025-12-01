@@ -51,8 +51,7 @@ const SkillCard = forwardRef(({ onOpenRecordModal, userId }, ref) => {
                     className="w-24 h-24 rounded-full object-cover"
                   />
                   <div
-                    className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full flex items-center justify-center text-lg shadow-lg"
-                    style={{ backgroundColor: "#61DAFB" }}
+                    className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full flex items-center justify-center text-lg shadow-lg bg-transparent"
                   >
                     <img src={skill.skillImageUrl} alt="" />
                   </div>

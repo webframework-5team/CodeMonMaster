@@ -19,9 +19,8 @@ export default function TechStackModal({ onClose, onSelect }) {
               onClick={() => onSelect(tech)}
             >
               <div
-                className="w-16 h-16 rounded-full flex items-center justify-center text-3xl bg-cover bg-center"
+                className="w-16 h-16 rounded-full flex items-center justify-center text-3xl bg-cover bg-center bg-transparent"
                 style={{
-                  backgroundColor: tech.bg,
                   backgroundImage: `url(${tech.imgUrl})`,
                 }}
               >
