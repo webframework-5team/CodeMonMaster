@@ -2,6 +2,7 @@ import React, { useEffect } from "react"
 import { useNavigate, Link } from "react-router-dom"
 import { useQuery } from "@tanstack/react-query"
 import axios from "axios"
+import useUserStats from "../hooks/useUserStats"
 
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/profile/card.tsx"
 import { Button } from "../components/ui/profile/button.tsx"
@@ -39,6 +40,9 @@ export default function ProfilePage() {
       return res.data.result
     },
   })
+
+  // 홈 화면과 동일한 방식으로 stats 가져오기, (해결한 문제)
+  const { stats } = useUserStats(userId)
 
   if (isLoading) {
     return (
@@ -127,7 +131,8 @@ export default function ProfilePage() {
           <Card>
             <CardContent className="pt-6 text-center">
               <Brain className="w-8 h-8 mx-auto mb-2 text-purple-500" />
-              <div className="text-2xl font-bold">{result.solvedQuestions}</div>
+              {/* ✅ stats.solvedQuestionCount 사용 (홈 화면과 동일) */}
+              <div className="text-2xl font-bold">{stats.solvedQuestionCount}</div>
               <div className="text-sm">해결한 문제</div>
             </CardContent>
           </Card>
