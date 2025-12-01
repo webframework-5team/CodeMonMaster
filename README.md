@@ -67,7 +67,8 @@ CodeMon Master는 사용자가 학습한 시간과 푼 문제 수에 따라 자�
 
 👨‍💻 팀원 및 역할 (Team & Responsibilities)
 
-<img width="1157" height="643" alt="image" src="https://github.com/user-attachments/assets/ddd9ed9e-15b4-411c-953b-f1fbae803842" />
+<img width="1555" height="962" alt="image" src="https://github.com/user-attachments/assets/bcd322c9-08c0-4bf8-880d-b600a260c0c4" />
+
 
 
 🛠 설치 및 실행 (Getting Started)
