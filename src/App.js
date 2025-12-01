@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';  // �
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import HomePage from './pages/HomePage';
-import QuestionsPage from "./pages/Questions/QuestionsPage";
+import QuestionsPage from "./pages/QuestionsPage";
 import ProfilePage from "./pages/ProfilePage";
 
 
@@ -32,7 +32,7 @@ function App() {
 
             {/* 주소창에 / (기본 주소) 라고 치면 HomePage를보여줍니다. */}
             <Route path="/home" element={<HomePage />} />
-          
+
             {/* 회원가입 */}
             <Route path="/signup" element={<SignupPage />} />
 
@@ -44,7 +44,7 @@ function App() {
           </Routes>
         </BrowserRouter>
       </div>
-    </QueryClientProvider>  
+    </QueryClientProvider>
   );
 }
 

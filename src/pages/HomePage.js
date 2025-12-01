@@ -1,4 +1,4 @@
-import LearningBuddiesPage from "../components/ui/home/LearningBuddies";
+import LearningBuddiesPage from "../components/home/LearningBuddies";
 
 const Home = () => (
   <div>

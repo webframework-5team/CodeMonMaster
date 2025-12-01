@@ -3,12 +3,11 @@
 import React, { useEffect } from "react"
 import { useNavigate, Link } from "react-router-dom"
 import { useQuery } from "@tanstack/react-query"
-import axios from "axios"
 import useUserStats from "../hooks/useUserStats"
 import { calculateBadgeCount, getBadgeInfo, getAllBadges } from "../utils/badgeUtils"
 
-import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/profile/card.tsx"
-import { Button } from "../components/ui/profile/button.tsx"
+import { Card, CardContent, CardHeader, CardTitle } from "../components/profile/card.tsx"
+import { Button } from "../components/profile/button.tsx"
 import {
   ArrowLeft,
   Trophy,
@@ -36,8 +35,8 @@ export default function ProfilePage() {
     queryKey: ["mypage", userId],
     enabled: Boolean(userId),
     queryFn: async () => {
-      const res = await axios.get(`/user/${userId}`)
-      return res.data.result
+      const res = await fetchUserProfile(userId)
+      return res.result
     },
   })
 
@@ -59,12 +58,12 @@ export default function ProfilePage() {
     )
 
   const result = data
-  
+
   // ==========================================
   // ★ [수정 1] 총 경험치 계산 로직 추가
   // ==========================================
   // ※ 팀원과 합의한 레벨업 기준이 10점이라면 10으로, 100점이면 100으로 설정하세요.
-  const levelUpExp = 100; 
+  const levelUpExp = 100;
   const totalCalculatedExp = ((result.level - 1) * levelUpExp) + result.exp;
   // ==========================================
 
@@ -152,13 +151,13 @@ export default function ProfilePage() {
           <Card>
             <CardContent className="pt-6 text-center">
               <TrendingUp className="w-8 h-8 mx-auto mb-2 text-green-500" />
-              
+
               {/* ========================================== */}
               {/* ★ [수정 2] result.exp 대신 계산된 값 사용 */}
               {/* ========================================== */}
               <div className="text-2xl font-bold">{totalCalculatedExp} EXP</div>
               <div className="text-sm">총 경험치</div>
-              
+
             </CardContent>
           </Card>
 
@@ -221,7 +220,8 @@ export default function ProfilePage() {
                     relative flex flex-col items-center p-4 rounded-lg border-2 transition-all cursor-pointer
                     ${badge.unlocked
                       ? "bg-white border-gray-300 shadow-md hover:scale-105 hover:shadow-lg"
-                      : "bg-gray-100 border-gray-200 opacity-50"}
+                      : "bg-gray-100 border-gray-200 opacity-50"
+                    }
                   `}
                 >
                   {!badge.unlocked && (
@@ -267,7 +267,7 @@ export default function ProfilePage() {
                 <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
                   <div
                     className="h-4 bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-500 flex items-center justify-end pr-2"
-                    style={{ width: `${progressPercent}%` }}
+                    style={{ width: `${progressPercent}% ` }}
                   >
                     <span className="text-xs text-white font-bold">
                       {Math.round(progressPercent)}%

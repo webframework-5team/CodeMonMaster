@@ -2,11 +2,11 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
-import { fetchQuestionsBySkill } from "../../services/questions";
+import { fetchQuestionsBySkill } from "../services/questions";
 
-import QuestionList from "../../components/questions/QuestionList";
-import QuestionDetail from "../../components/questions/QuestionDetail";
-import WrongAnswersModal from "../../components/questions/WrongAnswersModal";
+import QuestionList from "../components/questions/QuestionList";
+import QuestionDetail from "../components/questions/QuestionDetail";
+import WrongAnswersModal from "../components/questions/WrongAnswersModal";
 
 function QuestionsPage() {
   const location = useLocation();
@@ -25,7 +25,7 @@ function QuestionsPage() {
   // 오답노트
   const [wrongAnswers, setWrongAnswers] = useState([]);
   const [showWrongAnswersModal, setShowWrongAnswersModal] = useState(false);
-  
+
   // localStorage 초기화 방지 플래그
   const isInitialized = useRef(false);
 
@@ -47,7 +47,7 @@ function QuestionsPage() {
     localStorage.setItem(key, 'true');
     console.log(`✅ 문제 ${questionId} 해결 상태 저장`);
   }, [userId]);
-  
+
   // 디버깅: 페이지가 제대로 마운트되었는지 확인
   useEffect(() => {
     console.log("✅ QuestionsPage 마운트 완료!");
@@ -62,10 +62,10 @@ function QuestionsPage() {
 
     const storageKey = `wrongAnswers_${userId}_${skillId}`;
     const saved = localStorage.getItem(storageKey);
-    
+
     console.log(`[오답노트] Storage Key: ${storageKey}`);
     console.log(`[오답노트] Saved data:`, saved);
-    
+
     if (saved && saved !== "[]") {
       try {
         const parsed = JSON.parse(saved);
@@ -79,14 +79,14 @@ function QuestionsPage() {
     } else {
       console.log("📝 오답노트 없음 (새로 시작)");
     }
-    
+
     isInitialized.current = true;
   }, [userId, skillId]);
 
   // 오답노트가 변경될 때마다 localStorage에 저장
   useEffect(() => {
     if (!userId || !skillId || !isInitialized.current) return;
-    
+
     const storageKey = `wrongAnswers_${userId}_${skillId}`;
     localStorage.setItem(storageKey, JSON.stringify(wrongAnswers));
     console.log(`💾 오답노트 저장 (${wrongAnswers.length}개) to ${storageKey}`);
@@ -104,13 +104,13 @@ function QuestionsPage() {
         console.log(`📡 문제 목록 조회: skillId=${skillId}, userId=${userId}, difficulty=${difficulty}, solved=${solved}`);
         const res = await fetchQuestionsBySkill(skillId, userId, difficulty, solved);
         const data = res.data?.result?.questions || [];
-        
+
         // ✅ 각 문제에 solved 상태 추가
         const questionsWithSolved = data.map(q => ({
           ...q,
           solved: isQuestionSolved(q.questionId)
         }));
-        
+
         setQuestions(questionsWithSolved);
         console.log(`✅ 문제 목록 조회 성공 (${questionsWithSolved.length}개):`, questionsWithSolved);
       } catch (err) {
@@ -134,7 +134,7 @@ function QuestionsPage() {
       // ✅ localStorage 기반으로 해결한 문제 수 계산
       const solvedQuestions = totalData.filter(q => isQuestionSolved(q.questionId));
       setSolvedCount(solvedQuestions.length);
-      
+
       console.log(`📊 카운트 (${difficulty}): 해결=${solvedQuestions.length} / 전체=${totalData.length}`);
     } catch (err) {
       console.error("❌ 헤더 카운트 조회 실패:", err);
@@ -154,13 +154,13 @@ function QuestionsPage() {
       console.log(`🔄 문제 목록 갱신: difficulty=${difficulty}, solved=${solved}`);
       const res = await fetchQuestionsBySkill(skillId, userId, difficulty, solved);
       const data = res.data?.result?.questions || [];
-      
+
       // ✅ 각 문제에 solved 상태 추가
       const questionsWithSolved = data.map(q => ({
         ...q,
         solved: isQuestionSolved(q.questionId)
       }));
-      
+
       setQuestions(questionsWithSolved);
       console.log(`✅ 문제 목록 갱신 완료 (${questionsWithSolved.length}개)`);
     } catch (err) {
@@ -171,24 +171,24 @@ function QuestionsPage() {
   // 정답 처리 시 호출되는 콜백
   const handleCorrectAnswer = useCallback((questionId) => {
     console.log("✅ 정답 처리 - 카운트 및 목록 업데이트 시작");
-    
+
     // ✅ localStorage에 해결 상태 저장
     markQuestionAsSolved(questionId);
-    
+
     // 1. 즉시 UI 업데이트 (낙관적 업데이트)
     setSolvedCount(prev => prev + 1);
-    
+
     // 2. 서버에서 최신 카운트 가져오기 (정확성 보장)
     loadHeaderCounts();
-    
+
     // 3. 문제 목록 갱신 (필터와 상관없이 항상 갱신)
     refreshQuestionList();
-    
+
     // 4. React Query 캐시 무효화 - 프로필 및 홈 데이터 갱신
     queryClient.invalidateQueries({ queryKey: ["mypage"] });
     queryClient.invalidateQueries({ queryKey: ["userProfile"] });
     queryClient.invalidateQueries({ queryKey: ["userStats"] });
-    
+
     // 5. 선택된 문제 초기화 (목록에서 사라질 수 있으므로)
     setTimeout(() => {
       setSelectedId(null);
@@ -198,7 +198,7 @@ function QuestionsPage() {
   // 오답노트에 추가
   const handleAddToWrongAnswers = (wrongAnswer) => {
     console.log("❌ 오답 추가:", wrongAnswer);
-    
+
     setWrongAnswers((prev) => {
       // 중복 체크 (같은 questionId가 이미 있으면 교체)
       const filtered = prev.filter((item) => item.questionId !== wrongAnswer.questionId);
@@ -212,7 +212,7 @@ function QuestionsPage() {
   const handleClearWrongAnswers = () => {
     console.log("🗑️ 오답노트 전체 삭제");
     setWrongAnswers([]);
-    
+
     // localStorage에서도 삭제
     if (userId && skillId) {
       const storageKey = `wrongAnswers_${userId}_${skillId}`;
@@ -226,7 +226,7 @@ function QuestionsPage() {
     queryClient.invalidateQueries({ queryKey: ["mypage"] });
     queryClient.invalidateQueries({ queryKey: ["userProfile"] });
     queryClient.invalidateQueries({ queryKey: ["userStats"] });
-    
+
     navigate('/home');
   };
 

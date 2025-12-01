@@ -1,5 +1,5 @@
 import React from "react";
-import useCharacters from "../../../hooks/useCharacters";
+import useCharacters from "../../hooks/useCharacters";
 
 export default function AnimalModal({
   onClose,

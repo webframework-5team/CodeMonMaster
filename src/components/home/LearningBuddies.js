@@ -1,18 +1,18 @@
 import React, { useState, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+
 import Ranking from './Ranking';
 import AddButton from './AddSkillButton';
-import Header from './Header';
+import Header from '../layout/Header';
 import SkillCard from './SkillCard';
 import Stats from './Stats';
-import TechStackModal from './TechStackModal';
-import AnimalModal from './AnimalModal';
-import LearningRecordModal from './LearningRecordModal';
-import { saveUserSkill } from "../../../api/skills";
-import { getCurrentUser } from "../../../utils/storage";
+import TechStackModal from '../modals/TechStackModal';
+import AnimalModal from '../modals/AnimalModal';
+import LearningRecordModal from '../modals/LearningRecordModal';
+import { saveUserSkill } from "../../api/skills";
+import { getCurrentUser } from "../../utils/storage";
 
-import DuplicateSkillModal from './DuplicateSkillModal';
+import DuplicateSkillModal from '../modals/DuplicateSkillModal';
 
 export default function LearningBuddies() {
   const [isTechModalOpen, setIsTechModalOpen] = useState(false);
@@ -34,8 +34,8 @@ export default function LearningBuddies() {
     queryKey: ["userProfile", userId],
     enabled: !!userId,
     queryFn: async () => {
-      const res = await axios.get(`/user/${userId}`);
-      return res.data.result;
+      const res = await fetchUserProfile(userId);
+      return res.result;
     },
   });
 

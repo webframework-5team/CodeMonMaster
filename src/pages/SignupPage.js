@@ -16,7 +16,7 @@ export default function SignupPage() {
 
   // 로딩 및 에러 상태
   const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(""); 
+  const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
 
@@ -40,7 +40,7 @@ export default function SignupPage() {
       };
 
       // 2. 서버로 전송
-      const response = await axios.post("/auth/signup", userData);
+      const response = await signup(userData);
 
       console.log("가입 성공:", response.data);
       alert("회원가입 성공! 로그인 해주세요.");
@@ -48,7 +48,7 @@ export default function SignupPage() {
 
     } catch (error) {
       console.error("가입 에러 상세:", error);
-      
+
       // ⭐️ [핵심] 진짜 중복인지 확인하는 로직
       if (error.response) {
         // 상황 1: 이미 있는 이메일이라서 서버가 500 에러를 낸 경우
@@ -63,12 +63,12 @@ export default function SignupPage() {
         else {
           setErrorMessage("회원가입 중 오류가 발생했습니다.");
         }
-      } 
+      }
       // 상황 4: 아예 서버가 꺼져있거나 인터넷이 끊긴 경우
       else {
         setErrorMessage("서버와 연결할 수 없습니다. 인터넷을 확인해주세요.");
       }
-      
+
     } finally {
       setIsLoading(false);
     }
@@ -77,7 +77,7 @@ export default function SignupPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="p-8 bg-white rounded-lg shadow-lg w-full max-w-sm">
-        
+
         {/* 로고 */}
         <div className="flex flex-col items-center mb-6">
           <FaBookOpen className="w-10 h-10 text-purple-600 mb-3" />
@@ -98,12 +98,12 @@ export default function SignupPage() {
               id="username"
               type="text"
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
-              value={username} 
+              value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
             />
           </div>
-          
+
           {/* 이메일 */}
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">이메일</label>
@@ -170,7 +170,7 @@ export default function SignupPage() {
           )}
 
           <div className="pt-2">
-            <button 
+            <button
               type="submit"
               disabled={isLoading}
               className={`w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white 

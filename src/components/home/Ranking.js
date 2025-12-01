@@ -1,6 +1,6 @@
 import React from "react";
 import { GiCrown } from "react-icons/gi";
-import useRanking from "../../../hooks/useRanking";
+import useRanking from "../../hooks/useRanking";
 
 export default function Ranking({ myName }) {
   const { rankingData, myRank, loading } = useRanking(myName);

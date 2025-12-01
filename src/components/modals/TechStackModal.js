@@ -1,5 +1,5 @@
 import { useState } from "react";
-import useTechStacks from "../../../hooks/useTechStacks";
+import useTechStacks from "../../hooks/useTechStacks";
 
 export default function TechStackModal({ onClose, onSelect }) {
   const { techStacks } = useTechStacks();

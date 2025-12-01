@@ -7,7 +7,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  
+
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -15,12 +15,12 @@ export default function LoginPage() {
 
     try {
       // 로그인 API 호출
-      const response = await axios.post("/auth/login", {
+      const response = await login({
         email: email,
         password: password
       });
 
-      console.log("로그인 응답:", response.data); 
+      console.log("로그인 응답:", response.data);
       const result = response.data.result;
 
       // 유저 ID 추출 (서버 응답 키값 대응)
@@ -34,7 +34,7 @@ export default function LoginPage() {
 
       // 로컬 스토리지에 유저 정보 저장
       localStorage.setItem("userId", userId);
-      
+
       if (result?.token) {
         localStorage.setItem("token", result.token);
       }
@@ -42,16 +42,16 @@ export default function LoginPage() {
       // 사용자 이름 설정
       // 서버에서 이름이 넘어오지 않을 경우 이메일 아이디로 대체
       let userName = result.name || result.nickname;
-      
+
       if (!userName) {
-        userName = email.split("@")[0]; 
+        userName = email.split("@")[0];
       }
-      
+
       localStorage.setItem("name", userName);
 
       // 메인 페이지로 이동
       alert(`${userName}님 환영합니다!`);
-      navigate("/home"); 
+      navigate("/home");
 
     } catch (error) {
       console.error("로그인 에러:", error);
@@ -62,7 +62,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="p-8 bg-white rounded-lg shadow-lg w-full max-w-sm">
-        
+
         <div className="flex flex-col items-center mb-6">
           <FaBookOpen className="w-10 h-10 text-purple-600 mb-3" />
           <h2 className="text-3xl font-bold text-center bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent">
@@ -74,7 +74,7 @@ export default function LoginPage() {
         </div>
 
         <form onSubmit={handleLogin} className="space-y-4">
-          
+
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">이메일</label>
             <input
@@ -109,7 +109,7 @@ export default function LoginPage() {
           </div>
 
           <div className="pt-2">
-            <button 
+            <button
               type="submit"
               className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-900 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800"
             >

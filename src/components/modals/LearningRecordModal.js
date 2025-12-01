@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { updateUserLearningTime } from "../../../api/user";
+import { updateUserLearningTime } from "../../api/user";
 
 export default function LearningRecordModal({ onClose, selectedTech }) {
   const [time, setTime] = useState("");

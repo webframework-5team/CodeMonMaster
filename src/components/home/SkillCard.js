@@ -1,6 +1,6 @@
 import React, { forwardRef, useImperativeHandle } from "react";
 import { useNavigate } from "react-router-dom";
-import useUserSkills from "../../../hooks/useUserSkills";
+import useUserSkills from "../../hooks/useUserSkills";
 
 const SkillCard = forwardRef(({ onOpenRecordModal, userId }, ref) => {
   const { skills, refreshSkills } = useUserSkills(userId);
