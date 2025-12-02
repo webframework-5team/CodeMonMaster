@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaBookOpen, FaEye, FaEyeSlash } from 'react-icons/fa';
 import axios from 'axios';
+import { signup } from '../api/auth';
 
 export default function SignupPage() {
   // 입력 값 상태
@@ -42,7 +43,7 @@ export default function SignupPage() {
       // 2. 서버로 전송
       const response = await signup(userData);
 
-      console.log("가입 성공:", response.data);
+      console.log("가입 성공:", response);
       alert("회원가입 성공! 로그인 해주세요.");
       navigate("/login");
 

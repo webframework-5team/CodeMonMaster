@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaBookOpen, FaEye, FaEyeSlash } from 'react-icons/fa';
 import axios from 'axios';
+import { login } from '../api/auth';
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -20,8 +21,8 @@ export default function LoginPage() {
         password: password
       });
 
-      console.log("로그인 응답:", response.data);
-      const result = response.data.result;
+      console.log("로그인 응답:", response);
+      const result = response.result;
 
       // 유저 ID 추출 (서버 응답 키값 대응)
       const userId = result?.userId || result?.id;
