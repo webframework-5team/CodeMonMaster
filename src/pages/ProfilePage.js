@@ -5,7 +5,7 @@ import { useNavigate, Link } from "react-router-dom"
 import { useQuery } from "@tanstack/react-query"
 import useUserStats from "../hooks/useUserStats"
 import { calculateBadgeCount, getBadgeInfo, getAllBadges } from "../utils/badgeUtils"
-
+import { fetchUserProfile } from "../api/user";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/profile/card.tsx"
 import { Button } from "../components/profile/button.tsx"
 import {
@@ -60,11 +60,12 @@ export default function ProfilePage() {
   const result = data
 
   // ==========================================
-  // ★ [수정 1] 총 경험치 계산 로직 추가
+  // ★ [수정 1] 총 경험치 계산 로직 - 홈 화면과 동일하게
   // ==========================================
-  // ※ 팀원과 합의한 레벨업 기준이 10점이라면 10으로, 100점이면 100으로 설정하세요.
+  // 홈 화면의 Stats.js와 완전히 동일한 계산 방식 사용
+  // stats.learningMinutes를 현재 경험치로 사용
   const levelUpExp = 100;
-  const totalCalculatedExp = ((result.level - 1) * levelUpExp) + result.exp;
+  const totalCalculatedExp = ((stats.level - 1) * levelUpExp) + stats.learningMinutes;
   // ==========================================
 
   // 레벨 기반 뱃지 계산 (서버 값 무시)
@@ -113,7 +114,29 @@ export default function ProfilePage() {
         <Card className="mb-8">
           <CardContent className="pt-6">
             <div className="flex items-center gap-6">
-              <div className="text-6xl">👤</div>
+              {/* 프로필 아이콘 */}
+              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center shadow-lg">
+                <svg 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  width="56" 
+                  height="56" 
+                  viewBox="0 0 24 24" 
+                  fill="none" 
+                  stroke="url(#gradient)" 
+                  strokeWidth="2" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round"
+                >
+                  <defs>
+                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#9333ea" />
+                      <stop offset="100%" stopColor="#ec4899" />
+                    </linearGradient>
+                  </defs>
+                  <circle cx="12" cy="7" r="4" />
+                  <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                </svg>
+              </div>
               <div className="flex-1">
                 <h1 className="text-3xl font-bold mb-2">{result.name}</h1>
                 <p className="text-muted-foreground">{result.email}</p>

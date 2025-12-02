@@ -11,7 +11,7 @@ import AnimalModal from '../modals/AnimalModal';
 import LearningRecordModal from '../modals/LearningRecordModal';
 import { saveUserSkill } from "../../api/skills";
 import { getCurrentUser } from "../../utils/storage";
-
+import { fetchUserProfile } from "../../api/user";
 import DuplicateSkillModal from '../modals/DuplicateSkillModal';
 
 export default function LearningBuddies() {

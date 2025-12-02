@@ -15,8 +15,8 @@ export default function Header() {
 
         {/* 프로필 버튼 */}
         <Link to="/profile">
-          <button className="size-9 flex justify-center items-center rounded-md hover:bg-gray-200">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2">
+          <button className="w-10 h-10 flex justify-center items-center rounded-md hover:bg-gray-200">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="7" r="4" />
               <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
             </svg>
@@ -26,10 +26,10 @@ export default function Header() {
         {/* 새로고침 버튼 */}
         <button 
           onClick={handleRefresh}
-          className="size-9 flex justify-center items-center rounded-md hover:bg-gray-200 transition-colors"
+          className="w-10 h-10 flex justify-center items-center rounded-md hover:bg-gray-200 transition-colors"
           aria-label="새로고침"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
             <path d="M3 3v5h5" />
           </svg>
